@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:s3="http://www.mulesoft.org/schema/mule/s3" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/s3 http://www.mulesoft.org/schema/mule/s3/current/mule-s3.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6e72c673-b141-43c9-8504-68cddf4c4225" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<s3:config name="Amazon_S3_Configuration" doc:name="Amazon S3 Configuration" doc:id="8afc98be-233e-4c21-abff-5d0822650ae8" >
+		<s3:basic-connection accessKey="${secure::s3.accesskey}" secretKey="${secure::s3.secretkey}" />
+	</s3:config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="37143736-00ff-4853-9e2c-19e411e56b59" >
+		<salesforce:cached-basic-connection username="${secure::sfdc.username}" password="${secure::sfdc.password}" securityToken="${secure::sfdc.securityToken}" />
+	</salesforce:sfdc-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="51afdcb0-b083-4a67-8520-fd6f7f767409" file="s3tosf.properties" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="3fc0ccb9-486a-425e-8e07-31371a78d76c" file="s3tosf.properties" key="mulesoft" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<flow name="s3tosfFlow" doc:id="331e09b2-9d42-40a3-bfcd-e73f2254efcf" >
+		<http:listener doc:name="/s3tosf" doc:id="94ed835e-1581-4222-b3f0-1c22786f0ab0" config-ref="HTTP_Listener_config" path="/s3tosf"/>
+		<s3:get-object doc:name="Get object" doc:id="7a697ed7-c852-4a78-8032-1385c7cec06f" config-ref="Amazon_S3_Configuration" bucketName="${secure::s3.bucketname}" key="${secure::s3.key}" outputMimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="26533a40-6604-428d-8f8b-f46dc8530c99" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="67ecafca-9afc-4762-9de5-19786c0a3f18" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Id: payload.Id,
+	Name: payload.Name,
+	Type: payload.Type,
+	Phone: payload.Phone
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert doc:name="Upsert" doc:id="0923612c-d3f5-49d1-9ec4-62800cc2a7be" config-ref="Salesforce_Config" externalIdFieldName="Id" type="Account">
+			<salesforce:records ><![CDATA[#[%dw 2.0
+output application/java
+---
+[{
+	Name: payload.Name,
+	Type: payload.Type,
+	Phone: payload.Phone
+}]]]]></salesforce:records>
+		</salesforce:upsert>
+		<logger level="INFO" doc:name="Logger" doc:id="23e78ce7-142a-4838-a2e0-5e6699d4bd64" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="595b4f2c-44e7-490b-bed8-8cce0682ea26" message="SUCCESS"/>
+	</flow>
+</mule>

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="Account" format="json">
+      <types:shape format="weave" example="examples/AccountJSON.json"><![CDATA[%dw 2.0
+
+type Account = {|
+  Id: String, 
+  IsDeleted: String, 
+  MasterRecordId: String, 
+  Name: String, 
+  Type: String, 
+  ParentId: String, 
+  BillingStreet: String, 
+  BillingCity: String, 
+  BillingState: String, 
+  BillingPostalCode: String, 
+  BillingCountry: String, 
+  BillingLatitude: String, 
+  BillingLongitude: String, 
+  BillingGeocodeAccuracy: String, 
+  ShippingStreet: String, 
+  ShippingCity: String, 
+  ShippingState: String, 
+  ShippingPostalCode: String, 
+  ShippingCountry: String, 
+  ShippingLatitude: String, 
+  ShippingLongitude: String, 
+  ShippingGeocodeAccuracy: String, 
+  Phone: String, 
+  Fax: String, 
+  AccountNumber: String, 
+  Website: String, 
+  Sic: String, 
+  Industry: String, 
+  AnnualRevenue: String, 
+  NumberOfEmployees: String, 
+  Ownership: String, 
+  TickerSymbol: String, 
+  Description: String, 
+  Rating: String, 
+  Site: String, 
+  OwnerId: String, 
+  CreatedDate: String, 
+  CreatedById: String, 
+  LastModifiedDate: String, 
+  LastModifiedById: String, 
+  SystemModstamp: String, 
+  LastActivityDate: String, 
+  Jigsaw: String, 
+  JigsawCompanyId: String, 
+  CleanStatus: String, 
+  AccountSource: String, 
+  DunsNumber: String, 
+  Tradestyle: String, 
+  NaicsCode: String, 
+  NaicsDesc: String, 
+  YearStarted: String, 
+  SicDesc: String, 
+  DandbCompanyId: String, 
+  CustomerPriority__c: String, 
+  SLA__c: String, 
+  Active__c: String, 
+  NumberofLocations__c: String, 
+  UpsellOpportunity__c: String, 
+  SLASerialNumber__c: String, 
+  SLAExpirationDate__c: String, 
+  Customer_ID__c: String, 
+  Segment__c: String
+|} {"example": "{\\\"Id\\\":\\\"abc\\\",\\\"IsDeleted\\\":\\\"abc\\\",\\\"MasterRecordId\\\":\\\"abc\\\",\\\"Name\\\":\\\"abc\\\",\\\"Type\\\":\\\"abc\\\",\\\"ParentId\\\":\\\"abc\\\",\\\"BillingStreet\\\":\\\"abc\\\",\\\"BillingCity\\\":\\\"abc\\\",\\\"BillingState\\\":\\\"abc\\\",\\\"BillingPostalCode\\\":\\\"abc\\\",\\\"BillingCountry\\\":\\\"abc\\\",\\\"BillingLatitude\\\":\\\"abc\\\",\\\"BillingLongitude\\\":\\\"abc\\\",\\\"BillingGeocodeAccuracy\\\":\\\"abc\\\",\\\"ShippingStreet\\\":\\\"abc\\\",\\\"ShippingCity\\\":\\\"abc\\\",\\\"ShippingState\\\":\\\"abc\\\",\\\"ShippingPostalCode\\\":\\\"abc\\\",\\\"ShippingCountry\\\":\\\"abc\\\",\\\"ShippingLatitude\\\":\\\"abc\\\",\\\"ShippingLongitude\\\":\\\"abc\\\",\\\"ShippingGeocodeAccuracy\\\":\\\"abc\\\",\\\"Phone\\\":\\\"abc\\\",\\\"Fax\\\":\\\"abc\\\",\\\"AccountNumber\\\":\\\"abc\\\",\\\"Website\\\":\\\"abc\\\",\\\"Sic\\\":\\\"abc\\\",\\\"Industry\\\":\\\"abc\\\",\\\"AnnualRevenue\\\":\\\"abc\\\",\\\"NumberOfEmployees\\\":\\\"abc\\\",\\\"Ownership\\\":\\\"abc\\\",\\\"TickerSymbol\\\":\\\"abc\\\",\\\"Description\\\":\\\"abc\\\",\\\"Rating\\\":\\\"abc\\\",\\\"Site\\\":\\\"abc\\\",\\\"OwnerId\\\":\\\"abc\\\",\\\"CreatedDate\\\":\\\"abc\\\",\\\"CreatedById\\\":\\\"abc\\\",\\\"LastModifiedDate\\\":\\\"abc\\\",\\\"LastModifiedById\\\":\\\"abc\\\",\\\"SystemModstamp\\\":\\\"abc\\\",\\\"LastActivityDate\\\":\\\"abc\\\",\\\"Jigsaw\\\":\\\"abc\\\",\\\"JigsawCompanyId\\\":\\\"abc\\\",\\\"CleanStatus\\\":\\\"abc\\\",\\\"AccountSource\\\":\\\"abc\\\",\\\"DunsNumber\\\":\\\"abc\\\",\\\"Tradestyle\\\":\\\"abc\\\",\\\"NaicsCode\\\":\\\"abc\\\",\\\"NaicsDesc\\\":\\\"abc\\\",\\\"YearStarted\\\":\\\"abc\\\",\\\"SicDesc\\\":\\\"abc\\\",\\\"DandbCompanyId\\\":\\\"abc\\\",\\\"CustomerPriority__c\\\":\\\"abc\\\",\\\"SLA__c\\\":\\\"abc\\\",\\\"Active__c\\\":\\\"abc\\\",\\\"NumberofLocations__c\\\":\\\"abc\\\",\\\"UpsellOpportunity__c\\\":\\\"abc\\\",\\\"SLASerialNumber__c\\\":\\\"abc\\\",\\\"SLAExpirationDate__c\\\":\\\"abc\\\",\\\"Customer_ID__c\\\":\\\"abc\\\",\\\"Segment__c\\\":\\\"abc\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#7a697ed7-c852-4a78-8032-1385c7cec06f">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="Account"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#67ecafca-9afc-4762-9de5-19786c0a3f18">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="Account"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
