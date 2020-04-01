@@ -4,19 +4,13 @@ pipeline
 	stages{
 		stage('Build Application'){
 		steps{
-		bat 'mvn clean install'
-		}
-		}
-	
-		stage('MUnit Testing'){
-		steps{
-		bat 'mvn test'
+		bat 'cd s3tosf && mvn clean install'
 		}
 		}
 		
 		stage('Deploy Application to Cloudhub'){
 		steps{
-		bat 'mvn package deploy -DmuleDeploy'
+		bat 'cd s3tosf && mvn package deploy -DmuleDeploy'
 		}
 		}
 	}
